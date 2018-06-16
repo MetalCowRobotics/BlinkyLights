@@ -34,23 +34,76 @@ void setup() {
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
-  colorWipe(strip.Color(255, 0, 0), 50); // Red
-  colorWipe(strip.Color(0, 255, 0), 50); // Green
-  colorWipe(strip.Color(0, 0, 255), 50); // Blue
+  
+uint32_t color1 = strip.Color(random(0, 80), random(81, 120), random(121, 255));
+uint32_t color2 = strip.Color(random(121, 255), random(81, 120), random(0, 80));
+uint32_t black = strip.Color(0,0,0);
+uint32_t white = strip.Color(255,255,255);
+uint32_t red = strip.Color(255, 0, 0);
+uint32_t blue = strip.Color(0, 0, 255);
+uint32_t green = strip.Color(0, 255, 0);
+
+  centerOut(strip.Color(255, 0, 0), strip.Color(0, 0, 255), 50);
+  outCenter(strip.Color(0, 255, 0), strip.Color(0, 255, 0), 250); // Red
+  delay(1000);  
+
+  outCenter(black, black, 50);
+  delay(255);
+  
+      outCenter(white, white, 50);
+  delay(500);
+  
+  //colorWipe(strip.Color(255, 0, 0), 50); // Red
+  //colorWipe(strip.Color(0, 255, 0), 50); // Green
+  //colorWipe(strip.Color(0, 0, 255), 50); // Blue
 //colorWipe(strip.Color(0, 0, 0, 255), 50); // White RGBW
   // Send a theater pixel chase in...
-  theaterChase(strip.Color(127, 127, 127), 50); // White
-  theaterChase(strip.Color(127, 0, 0), 50); // Red
-  theaterChase(strip.Color(0, 0, 127), 50); // Blue
+  //theaterChase(strip.Color(127, 127, 127), 50); // White
+  //theaterChase(strip.Color(127, 0, 0), 50); // Red
+  //theaterChase(strip.Color(0, 0, 127), 50); // Blue
 
-  rainbow(20);
-  rainbowCycle(20);
-  theaterChaseRainbow(50);
+  //rainbow(20);
+  //rainbowCycle(20);
+  //theaterChaseRainbow(50);
 }
+
+void centerOut(uint32_t c, uint32_t c2, uint8_t wait) {
+  uint16_t upcounter = strip.numPixels()/2;
+  uint16_t downcounter = upcounter-1;
+  
+  for(uint16_t i=0; i<15; i=i+1) {
+    strip.setPixelColor(upcounter+i, c);
+
+    strip.setPixelColor(downcounter-i, c2);
+    strip.show();
+    delay(wait);
+  }
+
+
+  
+}
+
+
+void outCenter(uint32_t c, uint32_t c2, uint8_t wait) {
+  uint16_t upcounter = strip.numPixels()-1;
+  uint16_t downcounter = 0;
+  
+  for(uint16_t i=0; i<15; i=i+1) {
+    strip.setPixelColor(upcounter-i, c);
+
+    strip.setPixelColor(downcounter+i, c2);
+    strip.show();
+    delay(wait);
+  }
+
+  
+}
+
+
 
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
+  for(uint16_t i=0; i<strip.numPixels(); i=i+2) {
     strip.setPixelColor(i, c);
     strip.show();
     delay(wait);
@@ -108,7 +161,7 @@ void theaterChaseRainbow(uint8_t wait) {
         strip.setPixelColor(i+q, Wheel( (i+j) % 255));    //turn every third pixel on
       }
       strip.show();
-
+      
       delay(wait);
 
       for (uint16_t i=0; i < strip.numPixels(); i=i+3) {
